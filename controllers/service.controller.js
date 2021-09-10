@@ -4,6 +4,13 @@ const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
+const path=require('path')
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+	cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+	api_key:process.env.CLOUDINARY_API_KEY,
+	api_secret:process.env.CLOUDINARY_API_SECRET
+})
 // Mongo URI
 const mongoURI = process.env.MONGO_URI;
 // Create mongo connection
@@ -16,7 +23,7 @@ conn.once('open', () => {
   gfs = Grid(conn.db, mongoose.mongo);  
   gfs.collection('Images');
 });
-
+/*
 module.exports.createService=(req,res,next)=>{
 	console.log(req.files.services);	
 	const {name,description,type,contact,moreDescription}=req.body
@@ -50,7 +57,40 @@ module.exports.createService=(req,res,next)=>{
 		console.log('service',error);
 	})
 }
+*/
+module.exports.createService1=(req,res,next)=>{
+let index=req.files.length
 
+	for (let i = 0; i < req.files.length; i++) {
+		
+		
+	}
+	let results=[];
+	let result;
+	req.files.map(async(file)=>{
+		result=await cloudinary.uploader.upload(file.path)
+		results.push(result)
+	})
+   setTimeout(() => {
+	console.log(results) 
+	const service= new Service({
+		...req.body,imageUrls:results
+	})
+	service.save()
+
+	.then(service=>{
+		res.status(200).json({
+			message:'service succesfully created',
+			service:service
+	})
+	})
+	.catch(error=>{
+		res.status(400).json({error})
+		console.log(error)
+	}) 
+   }, 10000);
+}
+/*
 module.exports.updateServiceImage=(req,res,next)=>{
 	let id=req.params.id
 	console.log(req.files.services)
@@ -72,6 +112,53 @@ module.exports.updateServiceImage=(req,res,next)=>{
  function getID (id){
 	 return id;
 }
+*/
+module.exports.addImageService=(req,res,next)=>{
+	let index=req.files.length
+
+	for (let i = 0; i < req.files.length; i++) {
+		
+		
+	}
+	let results=[];
+	let result;
+	req.files.map(async(file)=>{
+		result=await cloudinary.uploader.upload(file.path)
+		results.push(result)
+	})
+   setTimeout(() => {
+	console.log(results) 
+	Service.updateOne({_id:req.params.id},{
+		$push:{
+			imageUrls:{
+				$each:results
+			}
+		}
+	})
+	.then(service=>{
+		res.status(200).json({
+			message:'images succesfully added to service',
+			service:service
+	})
+	})
+	.catch(error=>{
+		res.status(400).json({error})
+		console.log(error)
+	}) 
+   }, 10000);
+}
+module.exports.deleteServiceImage=(req,res,next)=>{
+
+	Service.updateOne({_id:req.params.id},{$pull:{imageUrls:{public_id:req.params.idImg}}})
+	.then(service=>
+		{
+			cloudinary.uploader.destroy(req.params.idImg, function(error,result) {
+				res.status(200).json(service)
+			console.log(result, error) });
+		})
+	.catch(console.log)
+}
+/*
 module.exports.addServiceRealisation=(req,res,next)=>{
 	let id=req.params.id
 	console.log(req.files.realisations)
@@ -95,9 +182,17 @@ module.exports.addServiceRealisation=(req,res,next)=>{
 	.then(service=>res.status(200).json({message:`service realisation of ${service.name} was updated`,service:service}))
 	.then(error=>res.status(404).json({message:'service does not exist'}))
 }
-
+*/
 module.exports.getAllServices=(req,res,next)=>{
 	Service.find()
+	.then(service=>res.status(200).json({services:service}))
+	.catch(error=>{
+		console.log('services find error : ',error);
+		res.status(500).json({message:error.message});
+	})
+}
+module.exports.getOneService=(req,res,next)=>{
+	Service.find({_id:req.params.id})
 	.then(service=>res.status(200).json({services:service}))
 	.catch(error=>{
 		console.log('services find error : ',error);
@@ -127,6 +222,7 @@ module.exports.deleteService=(req,res,next)=>{
 		res.status(500).json({message:error.message});
 	})
 }
+/*
 module.exports.deleteServiceImage=(req,res,next)=>{
 	let id=req.params.id
 	let filename=req.params.filename;
@@ -142,6 +238,16 @@ module.exports.deleteServiceImage=(req,res,next)=>{
 	})
 	.catch(error=>{
 		console.log('error when trying to delete service ',error);
+		res.status(500).json({message:error.message});
+	})
+}
+*/
+module.exports.updateService=(req,res,next)=>{
+	let id=req.params.id
+	Service.findOneAndUpdate({_id:id},{...req.body})
+	.then(service=>res.status(200).json({message:`service ${service.name} account was update successfully !`}))
+	.catch(error=>{
+		console.log('error when trying to ypdate service ',error);
 		res.status(500).json({message:error.message});
 	})
 }

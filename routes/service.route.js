@@ -6,14 +6,11 @@ const upload=require('../middlewares/upload.js')
 
 
 Router.get('/services',service.getAllServices)
-// Router.get('/service/:id',service.getOneservice)
-Router.put('/service/:id/realisation',upload,service.addServiceRealisation)
+Router.get('/service/:id',service.getOneService)
 Router.delete('/service/:id',service.deleteService)
-Router.delete('/service/image/:id/:filename',service.deleteServiceImage)
-Router.get('/service/image/:id/:filename',service.getServiceImage)
-Router.post('/services',upload,service.createService)
-Router.put('/service/image/:id',upload,service.updateServiceImage)
+Router.post('/service/create',upload.array("services"),service.createService1)
+Router.put('/service/image/add/:id',upload.array("services"),service.addImageService)
+Router.put('/service/image/delete/:id/:idImg',service.deleteServiceImage)
+Router.put('/service/update/:id',service.updateService)
 
 module.exports=Router;
-
-

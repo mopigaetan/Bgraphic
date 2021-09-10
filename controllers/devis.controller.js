@@ -6,7 +6,7 @@ module.exports.sendDevis=(req,res,next)=>{
 	const {email,description,name,phone}=req.body
 	const mailOptions={
 		from:`BGraphics client<${email}>`,
-		to:process.env.email,
+		to:email,
 		subject:'Demande de Devis',
 		html:`
 		<h2>Nouvelle demande de Devis</h2>

@@ -1,13 +1,17 @@
 const mongoose =require('mongoose');
 
-const serviceSchema=mongoose.Schema({
-	name:{type:String},
+const realisationSchema=mongoose.Schema({
+	name:String,
 	description:String,
 	moreDescription:String,
 	type:String,
 	contact:String,
-	link:String,
-	imageUrls:[{url:String,_id:String}]
+	//link:String,
+	imageUrls:[{}],
+	service:{
+		type:mongoose.Schema.Types.ObjectId,
+		ref:'Service'
+	}
 })
 
-module.exports=serviceSchema;
+module.exports=mongoose.model('Realisation',realisationSchema);
