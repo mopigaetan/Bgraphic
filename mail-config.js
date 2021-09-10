@@ -3,8 +3,10 @@ require('dotenv').config();
 var transporter =nodemailer.createTransport({
 	service:'gmail',
 	auth:{
-		user:process.env.email,
-		pass:process.env.pass
+		user:mopigaetan02@gmail.com,
+		//process.env.email,
+		pass:Herokugoogle@007
+		//process.env.pass
 	}
 });
 
