@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 require('dotenv').config();
-mongoose.connect(process.env.MONGO_URI,{
+mongoose.connect('mongodb+srv://bgraphics:bgraphics@cluster0.frrec.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
 	useNewUrlParser:true,
 	useUnifiedTopology:true,
 	useCreateIndex:true,
