@@ -22,6 +22,9 @@ app.use('/',service);
 app.use('/',realisation);
 app.use('/',article);
 app.use('/',Devis);
+app.get('/',(req,res,next)=>{
+  res.status(200).json('hello world')
+});
 
 
 
