@@ -117,19 +117,6 @@ cloudinary.config({
 	api_key:process.env.CLOUDINARY_API_KEY,
 	api_secret:process.env.CLOUDINARY_API_SECRET
 })
-// Mongo URI
-const mongoURI = process.env.MONGO_URI;
-// Create mongo connection
-const conn = mongoose.createConnection(mongoURI,{ useUnifiedTopology: true ,useNewUrlParser: true});
-// Init gf
-let gfs;
-
-conn.once('open', () => {
-  // Init stream
-  gfs = Grid(conn.db, mongoose.mongo);  
-  gfs.collection('Images');
-});
-
 module.exports.createRealisation=(req,res,next)=>{
 
 	let results=[];
