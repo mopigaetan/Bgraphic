@@ -7,10 +7,11 @@ const mongoose = require('mongoose');
 const path=require('path')
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
-	cloud_name:dkgst8kgo,
-	api_key:825828499416268,
-	api_secret:nd1aAUYFEcSaRoXUIGeZ7IlArZg
+	cloud_name:'dkgst8kgo',
+	api_key:'825828499416268',
+	api_secret:'nd1aAUYFEcSaRoXUIGeZ7IlArZg'
 })
+/*
 // Mongo URI
 const mongoURI = process.env.MONGO_URI;
 // Create mongo connection
@@ -23,6 +24,7 @@ conn.once('open', () => {
   gfs = Grid(conn.db, mongoose.mongo);  
   gfs.collection('Images');
 });
+*/
 /*
 module.exports.createService=(req,res,next)=>{
 	console.log(req.files.services);	
